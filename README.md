@@ -2,6 +2,8 @@
 
 # Nx Temporal-Worker
 
+Implement a Temporal.io workflow in Nx monorepo.
+
 This project was generated using [Nx](https://nx.dev).
 
 Temporal workflows are compiled separately from worker project by using a custom NX executor: https://github.com/raknes/nx-temporal/blob/95fa5e92999a7d41ea1121f1d141bc994159c36f/tools/executors/build-temporal-workflow/impl.ts
