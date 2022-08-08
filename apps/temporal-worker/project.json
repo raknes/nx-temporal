@@ -1,0 +1,106 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/temporal-worker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/temporal-worker",
+        "main": "apps/temporal-worker/src/main.ts",
+        "tsConfig": "apps/temporal-worker/tsconfig.app.json",
+        "assets": ["apps/temporal-worker/src/assets"],
+        "deleteOutputPath": false,
+        "additionalEntryPoints": [
+          {
+            "entryName": "client",
+            "entryPath": "apps/temporal-worker/src/client.ts"
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/temporal-worker/src/environments/environment.ts",
+              "with": "apps/temporal-worker/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "temporal-worker:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "temporal-worker:build:production"
+        }
+      }
+    },
+    "serve-client": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "temporal-worker:build",
+        "args": [
+          "dist/apps/temporal-worker/client"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "temporal-worker:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/temporal-worker/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/temporal-worker"],
+      "options": {
+        "jestConfig": "apps/temporal-worker/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "build-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx run temporal-worker:build",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "tsc -p tools/executors/build-temporal-workflow",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run temporal-worker:build-temporal-workflow",
+            "forwardAllArgs": false
+          }
+        ]
+      }
+    },
+    "build-temporal-workflow": {
+      "executor": "./tools/executors/build-temporal-workflow:build-temporal-workflow",
+      "options": {
+        "path": "./tools/executors/build-temporal-workflow",
+        "watch": false
+      }
+    }
+  },
+  "tags": []
+}

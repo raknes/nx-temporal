@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "build-temporal-workflow": {
+      "implementation": "./dist/impl",
+      "schema": "./schema.json",
+      "description": "Bundles temporal workflows."
+    }
+  }
+}

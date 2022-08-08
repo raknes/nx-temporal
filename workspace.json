@@ -1,4 +1,7 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "temporal-worker": "apps/temporal-worker"
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }
